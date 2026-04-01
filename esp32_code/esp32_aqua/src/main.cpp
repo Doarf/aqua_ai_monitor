@@ -1,18 +1,44 @@
 #include <Arduino.h>
+#include "display.h"
+#include "sensors.h"
 
-// put function declarations here:
-int myFunction(int, int);
+#define BUTTON_PIN 15
+
+unsigned long lastPress = 0;
+unsigned long lastRead = 0;
+const unsigned long debounce = 200;
+const unsigned long readInterval = 2000;
 
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+  Serial.begin(115200);
+  pinMode(BUTTON_PIN, INPUT_PULLUP);
+  initSensors();
+  initDisplay();
+  readSensors();
+  showMenu(currentMenu);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-}
+  unsigned long now = millis();
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
+  if (now - lastRead >= readInterval) {
+    lastRead = now;
+    readSensors();
+
+    Serial.println("--------------------");
+    Serial.printf("Temperature : %.1f C\n", temperature);
+    Serial.printf("Humidite    : %.1f %%\n", humidity);
+    Serial.printf("Turbidite   : %.0f NTU (%s)\n", ntu, getTurbidityLabel(ntu).c_str());
+    Serial.printf("Uptime      : %lu s\n", now / 1000);
+
+    showMenu(currentMenu);
+  }
+
+  if (digitalRead(BUTTON_PIN) == LOW) {
+    if (now - lastPress > debounce) {
+      lastPress = now;
+      currentMenu = (currentMenu + 1) % totalMenus;
+      showMenu(currentMenu);
+    }
+  }
 }
