@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPI Aquaculture — Live</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #0a0a0a;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      letter-spacing: 0.2em;
+      color: #00d4ff;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+    }
+
+    .stream-box {
+      border: 2px solid #00d4ff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+    }
+
+    .stream-box img {
+      display: block;
+      width: 640px;
+      max-width: 95vw;
+    }
+
+    .status {
+      margin-top: 16px;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #00d4ff;
+      border-radius: 50%;
+      margin-right: 6px;
+      animation: pulse 1.2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.2; }
+    }
+  </style>
+</head>
+<body>
+  <h1>🐟 SPI Aquaculture — Live</h1>
+
+  <div class="stream-box">
+    <img src="/video" alt="Flux caméra ESP32">
+  </div>
+
+  <p class="status">
+    <span class="dot"></span>Flux en direct — ESP32-CAM
+  </p>
+</body>
+</html>
