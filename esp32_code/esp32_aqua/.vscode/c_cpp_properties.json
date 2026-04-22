@@ -10,6 +10,9 @@
             "includePath": [
                 "C:/Users/doarf/Documents/DEV/aqua-ai-monitor/esp32_code/esp32_aqua/include",
                 "C:/Users/doarf/Documents/DEV/aqua-ai-monitor/esp32_code/esp32_aqua/src",
+                "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
+                "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
+                "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                 "C:/Users/doarf/Documents/DEV/aqua-ai-monitor/esp32_code/esp32_aqua/.pio/libdeps/esp32dev/DHT sensor library",
                 "C:/Users/doarf/Documents/DEV/aqua-ai-monitor/esp32_code/esp32_aqua/.pio/libdeps/esp32dev/Adafruit Unified Sensor",
                 "C:/Users/doarf/Documents/DEV/aqua-ai-monitor/esp32_code/esp32_aqua/.pio/libdeps/esp32dev/Adafruit SSD1306",
@@ -224,7 +227,6 @@
                 "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/Ethernet/src",
                 "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/FFat/src",
                 "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
-                "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
                 "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src",
                 "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdateServer/src",
                 "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/I2S/src",
@@ -241,8 +243,6 @@
                 "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/USB/src",
                 "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/Update/src",
                 "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
-                "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
-                "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                 "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
                 ""
             ],
@@ -251,6 +251,9 @@
                 "path": [
                     "C:/Users/doarf/Documents/DEV/aqua-ai-monitor/esp32_code/esp32_aqua/include",
                     "C:/Users/doarf/Documents/DEV/aqua-ai-monitor/esp32_code/esp32_aqua/src",
+                    "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
+                    "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
+                    "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
                     "C:/Users/doarf/Documents/DEV/aqua-ai-monitor/esp32_code/esp32_aqua/.pio/libdeps/esp32dev/DHT sensor library",
                     "C:/Users/doarf/Documents/DEV/aqua-ai-monitor/esp32_code/esp32_aqua/.pio/libdeps/esp32dev/Adafruit Unified Sensor",
                     "C:/Users/doarf/Documents/DEV/aqua-ai-monitor/esp32_code/esp32_aqua/.pio/libdeps/esp32dev/Adafruit SSD1306",
@@ -465,7 +468,6 @@
                     "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/Ethernet/src",
                     "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/FFat/src",
                     "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/FS/src",
-                    "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/HTTPClient/src",
                     "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdate/src",
                     "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/HTTPUpdateServer/src",
                     "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/I2S/src",
@@ -482,8 +484,6 @@
                     "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/USB/src",
                     "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/Update/src",
                     "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WebServer/src",
-                    "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WiFi/src",
-                    "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WiFiClientSecure/src",
                     "C:/Users/doarf/.platformio/packages/framework-arduinoespressif32/libraries/WiFiProv/src",
                     ""
                 ]

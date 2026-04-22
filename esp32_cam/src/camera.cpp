@@ -34,17 +34,21 @@ bool Camera::begin() {
     return false;
   }
 
+  // Réglages OV2640
   sensor_t* s = esp_camera_sensor_get();
   s->set_framesize(s, FRAMESIZE_VGA);
   s->set_quality(s, 6);
-  s->set_brightness(s, 0);
-  s->set_contrast(s, 0);
+  s->set_brightness(s, 1);
+  s->set_contrast(s, 1);
   s->set_saturation(s, 0);
   s->set_whitebal(s, 1);
   s->set_awb_gain(s, 1);
   s->set_exposure_ctrl(s, 1);
+  s->set_gain_ctrl(s, 1);
+  s->set_hmirror(s, 0);
+  s->set_vflip(s, 0);
 
-  Serial.println("[CAM] OV3660 initialisée ✓");
+  Serial.println("[CAM] OV2640 initialisée ✓");
   return true;
 }
 

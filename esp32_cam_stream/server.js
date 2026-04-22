@@ -3,13 +3,36 @@ const http    = require('http');
 const app     = express();
 const server  = http.createServer(app);
 
-const PORT   = 3000;
-let clients  = [];
+const PORT  = 3000;
+let clients = [];
+let lastSensorData = {
+  temperature: 0,
+  humidity: 0,
+  ph: 0,
+  ntu: 0,
+  updatedAt: null
+};
+
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
+// ── Réception données capteurs ESP32 #1 ──
+app.post('/data', (req, res) => {
+  lastSensorData = { ...req.body, updatedAt: new Date().toISOString() };
+  Serial.println(`[DATA] T:${lastSensorData.temperature} H:${lastSensorData.humidity} pH:${lastSensorData.ph} NTU:${lastSensorData.ntu}`);
+  console.log(`[DATA] T:${lastSensorData.temperature} H:${lastSensorData.humidity} pH:${lastSensorData.ph} NTU:${lastSensorData.ntu}`);
+  res.sendStatus(200);
+});
+
+// ── Exposition données capteurs ───────────
+app.get('/data', (req, res) => {
+  res.json(lastSensorData);
+});
+
+// ── Réception flux ESP32-CAM ──────────────
 app.post('/stream', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setTimeout(0);
@@ -18,10 +41,8 @@ app.post('/stream', (req, res) => {
   let buffer = Buffer.alloc(0);
 
   req.on('data', chunk => {
-    // Accumule les chunks
     buffer = Buffer.concat([buffer, chunk]);
 
-    // Cherche les marqueurs JPEG (début 0xFFD8, fin 0xFFD9)
     let start = -1;
     for (let i = 0; i < buffer.length - 1; i++) {
       if (buffer[i] === 0xFF && buffer[i+1] === 0xD8) {
@@ -31,7 +52,6 @@ app.post('/stream', (req, res) => {
         const frame = buffer.slice(start, i + 2);
         buffer = buffer.slice(i + 2);
 
-        // Envoie la frame complète à tous les clients
         clients.forEach(client => {
           try {
             client.write('--frame\r\nContent-Type: image/jpeg\r\n\r\n');
@@ -50,6 +70,7 @@ app.post('/stream', (req, res) => {
   req.on('error', () => res.sendStatus(500));
 });
 
+// ── Envoi flux MJPEG au navigateur ────────
 app.get('/video', (req, res) => {
   res.setHeader('Content-Type', 'multipart/x-mixed-replace; boundary=frame');
   res.setHeader('Cache-Control', 'no-cache');
@@ -66,6 +87,6 @@ app.get('/video', (req, res) => {
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-  console.log(`\n=== ESP32-CAM Stream Server ===`);
+  console.log(`\n=== SPI Aquaculture Server ===`);
   console.log(`Site web : http://localhost:${PORT}`);
 });
