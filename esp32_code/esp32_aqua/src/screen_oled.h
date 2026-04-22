@@ -10,7 +10,7 @@ public:
   ScreenOLED();
   bool begin();
   void showSplash();
-  void showData(const SensorData& data);
+  void showData(const SensorData& data, float ph);
   void showError(const String& msg);
 private:
   Adafruit_SSD1306 _display;
