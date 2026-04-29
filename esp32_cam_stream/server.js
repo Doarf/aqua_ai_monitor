@@ -6,10 +6,11 @@ const server  = http.createServer(app);
 const PORT  = 3000;
 let clients = [];
 let lastSensorData = {
-  temperature: 0,
-  humidity: 0,
-  ph: 0,
-  ntu: 0,
+  temperature: null,
+  humidity: null,
+  ph: null,
+  ntu: null,
+  waterTemp: null,
   updatedAt: null
 };
 
@@ -19,20 +20,16 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/public/index.html');
 });
 
-// ── Réception données capteurs ESP32 #1 ──
 app.post('/data', (req, res) => {
   lastSensorData = { ...req.body, updatedAt: new Date().toISOString() };
-  Serial.println(`[DATA] T:${lastSensorData.temperature} H:${lastSensorData.humidity} pH:${lastSensorData.ph} NTU:${lastSensorData.ntu}`);
-  console.log(`[DATA] T:${lastSensorData.temperature} H:${lastSensorData.humidity} pH:${lastSensorData.ph} NTU:${lastSensorData.ntu}`);
+  console.log(`[DATA] T:${lastSensorData.temperature} H:${lastSensorData.humidity} pH:${lastSensorData.ph} NTU:${lastSensorData.ntu} Teau:${lastSensorData.waterTemp}`);
   res.sendStatus(200);
 });
 
-// ── Exposition données capteurs ───────────
 app.get('/data', (req, res) => {
   res.json(lastSensorData);
 });
 
-// ── Réception flux ESP32-CAM ──────────────
 app.post('/stream', (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setTimeout(0);
@@ -42,16 +39,12 @@ app.post('/stream', (req, res) => {
 
   req.on('data', chunk => {
     buffer = Buffer.concat([buffer, chunk]);
-
     let start = -1;
     for (let i = 0; i < buffer.length - 1; i++) {
-      if (buffer[i] === 0xFF && buffer[i+1] === 0xD8) {
-        start = i;
-      }
+      if (buffer[i] === 0xFF && buffer[i+1] === 0xD8) start = i;
       if (start !== -1 && buffer[i] === 0xFF && buffer[i+1] === 0xD9) {
         const frame = buffer.slice(start, i + 2);
         buffer = buffer.slice(i + 2);
-
         clients.forEach(client => {
           try {
             client.write('--frame\r\nContent-Type: image/jpeg\r\n\r\n');
@@ -59,7 +52,6 @@ app.post('/stream', (req, res) => {
             client.write('\r\n');
           } catch(e) {}
         });
-
         start = -1;
         i = 0;
       }
@@ -70,16 +62,13 @@ app.post('/stream', (req, res) => {
   req.on('error', () => res.sendStatus(500));
 });
 
-// ── Envoi flux MJPEG au navigateur ────────
 app.get('/video', (req, res) => {
   res.setHeader('Content-Type', 'multipart/x-mixed-replace; boundary=frame');
   res.setHeader('Cache-Control', 'no-cache');
   res.setHeader('Connection', 'keep-alive');
   res.setTimeout(0);
-
   clients.push(res);
   console.log(`[+] Client connecté (${clients.length})`);
-
   req.on('close', () => {
     clients = clients.filter(c => c !== res);
     console.log(`[-] Client déconnecté (${clients.length})`);

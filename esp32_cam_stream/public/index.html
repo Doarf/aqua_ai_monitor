@@ -3,108 +3,525 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SPI Aquaculture — Live</title>
+  <title>SPI Aquaculture</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #0a0a0a;
-      color: #fff;
-      font-family: 'Segoe UI', sans-serif;
+      background: #f6f8fa;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      color: #24292f;
+    }
+
+    /* ── Nav ── */
+    nav {
+      background: #fff;
+      border-bottom: 1px solid #e1e4e8;
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo {
+      width: 28px;
+      height: 28px;
+      background: #0969da;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding: 20px;
-      gap: 24px;
     }
 
-    .stream-box {
-      border: 2px solid #00d4ff;
-      border-radius: 8px;
+    .nav-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #24292f;
+    }
+
+    .nav-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #dafbe1;
+      color: #1a7f37;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .nav-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #1a7f37;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .nav-time {
+      font-size: 12px;
+      color: #8c959f;
+    }
+
+    /* ── Layout ── */
+    .container {
+      max-width: 1100px;
+      margin: 24px auto;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 20px;
+    }
+
+    /* ── Left panel ── */
+    .left-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cam-box {
+      background: #1c2128;
+      border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
+      border: 1px solid #e1e4e8;
+    }
+
+    .cam-box img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 4/3;
+      object-fit: cover;
+    }
+
+    .cam-label {
+      padding: 8px 10px;
+      background: #1c2128;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cam-label span {
+      font-size: 10px;
+      color: #8c959f;
+    }
+
+    .cam-live {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      color: #3fb950;
+    }
+
+    .cam-live-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #3fb950;
+      animation: pulse 1.5s infinite;
+    }
+
+    /* ── Alert box ── */
+    .alert-box {
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .alert-header {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e1e4e8;
+      font-size: 12px;
+      font-weight: 600;
+      color: #24292f;
+    }
+
+    .alert-list {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .alert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 6px;
+      background: #f6f8fa;
+    }
+
+    .alert-item.warning {
+      background: #fff8c5;
+      border: 1px solid #ffa657;
+    }
+
+    .alert-item.ok {
+      background: #dafbe1;
+      border: 1px solid #56d364;
+    }
+
+    .alert-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      margin-top: 3px;
       flex-shrink: 0;
     }
 
-    .stream-box img {
-      display: block;
-      width: 320px;
+    .alert-txt {
+      font-size: 11px;
+      color: #24292f;
+      line-height: 1.4;
     }
 
-    .sensors {
-      display: grid;
-      grid-template-columns: 1fr;
+    .alert-time {
+      font-size: 10px;
+      color: #8c959f;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* ── Right panel ── */
+    .right-panel {
+      display: flex;
+      flex-direction: column;
       gap: 16px;
-      width: 220px;
     }
 
-    .sensor-card {
-      background: #111;
-      border: 1px solid #00d4ff33;
-      border-radius: 8px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .sensor-card .label {
-      font-size: 0.75rem;
-      color: #666;
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #57606a;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.06em;
+      margin-bottom: 2px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .metric-card {
+      background: #fff;
+      border: 1px solid #e1e4e8;
+      border-radius: 10px;
+      padding: 16px;
+      transition: box-shadow 0.2s;
+    }
+
+    .metric-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .metric-card.warning {
+      border-color: #ffa657;
+    }
+
+    .metric-label {
+      font-size: 11px;
+      color: #57606a;
       margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    .sensor-card .value {
-      font-size: 1.8rem;
-      font-weight: bold;
-      color: #00d4ff;
+    .metric-label-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .sensor-card .unit {
-      font-size: 0.85rem;
-      color: #444;
-      margin-top: 4px;
+    .metric-value {
+      font-size: 28px;
+      font-weight: 500;
+      color: #0969da;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .metric-card.warning .metric-value {
+      color: #bc4c00;
+    }
+
+    .metric-unit {
+      font-size: 11px;
+      color: #8c959f;
+      margin-bottom: 10px;
+    }
+
+    .metric-bar {
+      height: 3px;
+      background: #eaeef2;
+      border-radius: 2px;
+    }
+
+    .metric-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: #0969da;
+      transition: width 0.5s ease;
+    }
+
+    .metric-card.warning .metric-bar-fill {
+      background: #ffa657;
+    }
+
+    /* ── Buttons ── */
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      background: #f6f8fa;
+      border: 1px solid #d0d7de;
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-size: 12px;
+      color: #24292f;
+      cursor: pointer;
+      font-weight: 500;
+      transition: background 0.15s;
+    }
+
+    .btn:hover { background: #eaeef2; }
+
+    .btn-primary {
+      background: #0969da;
+      border-color: #0969da;
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: #0860ca; }
+
+    /* ── Update info ── */
+    .update-info {
+      font-size: 11px;
+      color: #8c959f;
+      text-align: right;
     }
   </style>
 </head>
 <body>
-  <div class="stream-box">
-    <img src="/video" alt="Flux caméra ESP32">
-  </div>
 
-  <div class="sensors">
-    <div class="sensor-card">
-      <div class="label">Température</div>
-      <div class="value" id="temp">--</div>
-      <div class="unit">°C</div>
+  <nav>
+    <div class="nav-left">
+      <div class="nav-logo">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
+          <path d="M8 12c0-2.21 1.79-4 4-4s4 1.79 4 4-1.79 4-4 4-4-1.79-4-4z"/>
+        </svg>
+      </div>
+      <span class="nav-title">SPI Aquaculture</span>
     </div>
-    <div class="sensor-card">
-      <div class="label">Humidité</div>
-      <div class="value" id="hum">--</div>
-      <div class="unit">%</div>
+    <div class="nav-badge">
+      <div class="nav-badge-dot"></div>
+      En ligne
     </div>
-    <div class="sensor-card">
-      <div class="label">pH</div>
-      <div class="value" id="ph">--</div>
-      <div class="unit">pH</div>
+    <span class="nav-time" id="clock">--:--:--</span>
+  </nav>
+
+  <div class="container">
+
+    <!-- Left -->
+    <div class="left-panel">
+      <div class="cam-box">
+        <img src="/video" alt="Caméra">
+        <div class="cam-label">
+          <span>OV2640 · 320×240</span>
+          <div class="cam-live">
+            <div class="cam-live-dot"></div>
+            LIVE
+          </div>
+        </div>
+      </div>
+
+      <div class="alert-box">
+        <div class="alert-header">Alertes</div>
+        <div class="alert-list" id="alert-list">
+          <div class="alert-item ok">
+            <div class="alert-dot" style="background:#1a7f37;"></div>
+            <span class="alert-txt">Tous les capteurs nominaux</span>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="sensor-card">
-      <div class="label">Turbidité</div>
-      <div class="value" id="ntu">--</div>
-      <div class="unit">NTU</div>
+
+    <!-- Right -->
+    <div class="right-panel">
+
+      <div>
+        <div class="section-title">Ambiance</div>
+        <div class="metrics-grid" style="grid-template-columns: repeat(2,1fr);">
+          <div class="metric-card" id="card-temp">
+            <div class="metric-label">
+              Température air
+              <div class="metric-label-icon" style="background:#ddf4ff;">🌡️</div>
+            </div>
+            <div class="metric-value" id="temp">--</div>
+            <div class="metric-unit">°C</div>
+            <div class="metric-bar"><div class="metric-bar-fill" id="bar-temp" style="width:0%"></div></div>
+          </div>
+          <div class="metric-card" id="card-hum">
+            <div class="metric-label">
+              Humidité
+              <div class="metric-label-icon" style="background:#ddf4ff;">💧</div>
+            </div>
+            <div class="metric-value" id="hum">--</div>
+            <div class="metric-unit">%</div>
+            <div class="metric-bar"><div class="metric-bar-fill" id="bar-hum" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title">Eau</div>
+        <div class="metrics-grid">
+          <div class="metric-card" id="card-waterTemp">
+            <div class="metric-label">
+              Température eau
+              <div class="metric-label-icon" style="background:#ddf4ff;">🌊</div>
+            </div>
+            <div class="metric-value" id="waterTemp">--</div>
+            <div class="metric-unit">°C</div>
+            <div class="metric-bar"><div class="metric-bar-fill" id="bar-waterTemp" style="width:0%"></div></div>
+          </div>
+          <div class="metric-card" id="card-ph">
+            <div class="metric-label">
+              pH
+              <div class="metric-label-icon" style="background:#fff8c5;">⚗️</div>
+            </div>
+            <div class="metric-value" id="ph">--</div>
+            <div class="metric-unit">pH</div>
+            <div class="metric-bar"><div class="metric-bar-fill" id="bar-ph" style="width:0%"></div></div>
+          </div>
+          <div class="metric-card" id="card-ntu">
+            <div class="metric-label">
+              Turbidité
+              <div class="metric-label-icon" style="background:#f6f8fa;">🔬</div>
+            </div>
+            <div class="metric-value" id="ntu">--</div>
+            <div class="metric-unit">NTU</div>
+            <div class="metric-bar"><div class="metric-bar-fill" id="bar-ntu" style="width:0%"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="actions">
+          <button class="btn">Historique</button>
+          <button class="btn">Exporter</button>
+          <button class="btn btn-primary">Calibrer pH</button>
+        </div>
+        <span class="update-info" id="update-info">En attente...</span>
+      </div>
+
     </div>
   </div>
 
   <script>
+    // Horloge
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('clock').textContent = now.toLocaleTimeString('fr-FR');
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Seuils d'alerte
+    const thresholds = {
+      ph:        { min: 6.5,  max: 8.5  },
+      ntu:       { min: 0,    max: 1000 },
+      temp:      { min: 15,   max: 35   },
+      waterTemp: { min: 10,   max: 30   },
+      hum:       { min: 0,    max: 100  }
+    };
+
+    function checkAlert(key, value) {
+      if (value === null || value === undefined) return false;
+      const t = thresholds[key];
+      return value < t.min || value > t.max;
+    }
+
+    function updateAlerts(data) {
+      const alerts = [];
+      if (checkAlert('ph', data.ph))
+        alerts.push({ msg: `pH anormal : ${data.ph} (seuil 6.5–8.5)`, type: 'warning' });
+      if (checkAlert('ntu', data.ntu))
+        alerts.push({ msg: `Turbidité élevée : ${data.ntu} NTU`, type: 'warning' });
+      if (checkAlert('temp', data.temperature))
+        alerts.push({ msg: `Temp. air hors plage : ${data.temperature}°C`, type: 'warning' });
+      if (checkAlert('waterTemp', data.waterTemp))
+        alerts.push({ msg: `Temp. eau hors plage : ${data.waterTemp}°C`, type: 'warning' });
+
+      const list = document.getElementById('alert-list');
+      if (alerts.length === 0) {
+        list.innerHTML = `<div class="alert-item ok">
+          <div class="alert-dot" style="background:#1a7f37;"></div>
+          <span class="alert-txt">Tous les capteurs nominaux</span>
+        </div>`;
+      } else {
+        list.innerHTML = alerts.map(a => `
+          <div class="alert-item ${a.type}">
+            <div class="alert-dot" style="background:#ffa657;"></div>
+            <span class="alert-txt">${a.msg}</span>
+          </div>
+        `).join('');
+      }
+    }
+
+    function setMetric(id, value, barId, percent, warning) {
+      const el = document.getElementById(id);
+      const bar = document.getElementById(barId);
+      const card = document.getElementById('card-' + id);
+      if (el) el.textContent = value !== null ? value : '--';
+      if (bar) bar.style.width = percent + '%';
+      if (card) card.classList.toggle('warning', warning);
+    }
+
     async function fetchData() {
       try {
         const res  = await fetch('/data');
         const data = await res.json();
-        document.getElementById('temp').textContent = data.temperature ?? '--';
-        document.getElementById('hum').textContent  = data.humidity    ?? '--';
-        document.getElementById('ph').textContent   = data.ph          ?? '--';
-        document.getElementById('ntu').textContent  = data.ntu         ?? '--';
+
+        setMetric('temp',      data.temperature?.toFixed(1), 'bar-temp',      Math.min((data.temperature / 40) * 100, 100), checkAlert('temp', data.temperature));
+        setMetric('hum',       data.humidity?.toFixed(1),    'bar-hum',       Math.min(data.humidity, 100),                false);
+        setMetric('waterTemp', data.waterTemp?.toFixed(1),   'bar-waterTemp', Math.min((data.waterTemp / 40) * 100, 100),  checkAlert('waterTemp', data.waterTemp));
+        setMetric('ph',        data.ph?.toFixed(2),          'bar-ph',        Math.min((data.ph / 14) * 100, 100),         checkAlert('ph', data.ph));
+        setMetric('ntu',       data.ntu?.toFixed(0),         'bar-ntu',       Math.min((data.ntu / 3000) * 100, 100),      checkAlert('ntu', data.ntu));
+
+        updateAlerts(data);
+
+        const updated = data.updatedAt ? new Date(data.updatedAt).toLocaleTimeString('fr-FR') : '--';
+        document.getElementById('update-info').textContent = `Dernière MAJ : ${updated}`;
       } catch(e) {}
     }
 
